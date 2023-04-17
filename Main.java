@@ -1,23 +1,63 @@
+import java.util.Scanner;
+
 public class Main {
+
     public static void main(String[] args) {
-        // Create inventory
-        Inventory inventory = new Inventory();
 
-        // Add products to inventory
-        inventory.addProduct("Coffee", 10);
-        inventory.addProduct("Tea", 5);
+        InventoryBST inventory = new InventoryBST();
+        Scanner scanner = new Scanner(System.in);
 
-        // Create a new menu
-        Menu menu = new Menu(inventory);
+        while (true) {
+            System.out.println("Enter an operation: insert, delete, search, or exit");
+            String operation = scanner.nextLine();
 
-        // Create a new order
-        Order order = new Order(menu);
+            if (operation.equals("insert")) {
+                System.out.println("Enter the item name:");
+                String name = scanner.nextLine();
+                System.out.println("Enter the item quantity:");
+                int quantity = Integer.parseInt(scanner.nextLine());
+                inventory.put(quantity, name);
+                System.out.println("Item added to inventory.");
 
-        // Add items to order
-        order.addItem("Coffee", 2);
-        order.addItem("Tea", 1);
+            } else if (operation.equals("delete")) {
+                System.out.println("Enter the item name:");
+                String name = scanner.nextLine();
+                int quantity = findQuantity(inventory, name);
+                if (quantity == -1) {
+                    System.out.println("Item not found in inventory.");
+                } else {
+                    inventory.delete(quantity);
+                    System.out.println("Item deleted from inventory.");
+                }
 
-        // Print order summary
-        System.out.println(order.getSummary());
+            } else if (operation.equals("search")) {
+                System.out.println("Enter the item name:");
+                String name = scanner.nextLine();
+                int quantity = findQuantity(inventory, name);
+                if (quantity == -1) {
+                    System.out.println("Item not found in inventory.");
+                } else {
+                    System.out.println("Item quantity: " + quantity);
+                }
+
+            } else if (operation.equals("exit")) {
+                break;
+
+            } else {
+                System.out.println("Invalid operation.");
+            }
+        }
+
+        scanner.close();
+    }
+
+    private static int findQuantity(InventoryBST inventory, String name) {
+        for (int i = 0; i < inventory.size(); i++) {
+            String item = inventory.get(i);
+            if (item != null && item.equals(name)) {
+                return i;
+            }
+        }
+        return -1;
     }
 }
