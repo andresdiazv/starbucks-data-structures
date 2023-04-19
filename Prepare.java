@@ -2,12 +2,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Prepare {
-    private Map<String, Double> prices;
-    private Map<String, Integer> inventory;
+    private Drink [] orderItems;
 
-    public Prepare(Map<String, Double> prices, Map<String, Integer> inventory) {
-        this.prices = prices;
-        this.inventory = inventory;
+    public Prepare() {
+        this.orderItems = items;
     }
 
     public void executeOrder(Map<String, Integer> order) throws InsufficientInventoryException {
