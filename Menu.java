@@ -1,5 +1,7 @@
 import java.util.HashMap;
 import java.util.Map;
+import java.util.List;
+import java.util.ArrayList;
 
 public class Menu {
     private HashMap<String, Drink> menuItems;
@@ -61,9 +63,11 @@ public class Menu {
     }
 
     public void displayMenu() {
+        List<Drink> drinks = new ArrayList<>(menuItems.values());
+        List<Drink> sortedDrinks = DrinkSorter.sortDrinks(drinks);
+
         System.out.println("\nMenu:");
-        for (Map.Entry<String, Drink> entry : menuItems.entrySet()) {
-            Drink drink = entry.getValue();
+        for (Drink drink : sortedDrinks) {
             System.out.printf("%s - $%.2f%n", drink.getName(), drink.getPrice());
         }
         System.out.print("\n");
