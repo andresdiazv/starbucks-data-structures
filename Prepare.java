@@ -37,4 +37,7 @@ public class Prepare {
     public void setInventory(Map<String, Integer> inventory) {
         this.inventory = inventory;
     }
+
+    public void executeOrder() {
+    }
 }
