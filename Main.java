@@ -3,61 +3,26 @@ import java.util.Scanner;
 public class Main {
 
     public static void main(String[] args) {
-
         InventoryBST inventory = new InventoryBST();
+        Menu menu = new Menu(inventory);
         Scanner scanner = new Scanner(System.in);
+        HandleOperations handleOperations = new HandleOperations();
 
         while (true) {
-            System.out.println("Enter an operation: insert, delete, search, or exit");
-            String operation = scanner.nextLine();
+            System.out.println("\nEnter your role: 'Manager' or 'Customer' (or type 'exit' to quit)");
+            String userRole = scanner.nextLine();
 
-            if (operation.equals("insert")) {
-                System.out.println("Enter the item name:");
-                String name = scanner.nextLine();
-                System.out.println("Enter the item quantity:");
-                int quantity = Integer.parseInt(scanner.nextLine());
-                inventory.put(quantity, name);
-                System.out.println("Item added to inventory.");
-
-            } else if (operation.equals("delete")) {
-                System.out.println("Enter the item name:");
-                String name = scanner.nextLine();
-                int quantity = findQuantity(inventory, name);
-                if (quantity == -1) {
-                    System.out.println("Item not found in inventory.");
-                } else {
-                    inventory.delete(quantity);
-                    System.out.println("Item deleted from inventory.");
-                }
-
-            } else if (operation.equals("search")) {
-                System.out.println("Enter the item name:");
-                String name = scanner.nextLine();
-                int quantity = findQuantity(inventory, name);
-                if (quantity == -1) {
-                    System.out.println("Item not found in inventory.");
-                } else {
-                    System.out.println("Item quantity: " + quantity);
-                }
-
-            } else if (operation.equals("exit")) {
+            if (userRole.equalsIgnoreCase("Manager")) {
+                handleOperations.handleManagerOperations(scanner, inventory, menu);
+            } else if (userRole.equalsIgnoreCase("Customer")) {
+                handleOperations.handleCustomerOperations(scanner, inventory, menu);
+            } else if (userRole.equalsIgnoreCase("exit")) {
                 break;
-
             } else {
-                System.out.println("Invalid operation.");
+                System.out.println("Invalid role. Please enter 'Manager' or 'Customer'.");
             }
         }
 
         scanner.close();
-    }
-
-    private static int findQuantity(InventoryBST inventory, String name) {
-        for (int i = 0; i < inventory.size(); i++) {
-            String item = inventory.get(i);
-            if (item != null && item.equals(name)) {
-                return i;
-            }
-        }
-        return -1;
     }
 }

@@ -2,56 +2,65 @@ public class InventoryBST {
 
     private Node root;
 
-    // Inner class representing a single node in the binary search tree
     private class Node {
-        private int key;
-        private String value;
+        private String key;
+        private int value;
         private Node left, right;
 
-        public Node(int key, String value) {
+        public Node(String key, int value) {
             this.key = key;
             this.value = value;
         }
     }
 
-    // Inserts a new node into the binary search tree with the given key and value
-    public void put(int key, String value) {
+    public void put(String key, int value) {
         root = put(root, key, value);
     }
 
-    // Recursive helper method for put()
-    private Node put(Node x, int key, String value) {
-        if (x == null) return new Node(key, value);
-        if (key < x.key) x.left = put(x.left, key, value);
-        else if (key > x.key) x.right = put(x.right, key, value);
-        else x.value = value;
+    private Node put(Node x, String key, int value) {
+        if (x == null)
+            return new Node(key, value);
+        int cmp = key.compareTo(x.key);
+        if (cmp < 0)
+            x.left = put(x.left, key, value);
+        else if (cmp > 0)
+            x.right = put(x.right, key, value);
+        else
+            x.value = value;
         return x;
     }
 
-    // Retrieves the value associated with the given key in the binary search tree
-    public String get(int key) {
+    public int get(String key) {
         Node x = root;
         while (x != null) {
-            if (key < x.key) x = x.left;
-            else if (key > x.key) x = x.right;
-            else return x.value;
+            int cmp = key.compareTo(x.key);
+            if (cmp < 0)
+                x = x.left;
+            else if (cmp > 0)
+                x = x.right;
+            else
+                return x.value;
         }
-        return null;
+        return -1;
     }
 
-    // Deletes the node with the given key from the binary search tree
-    public void delete(int key) {
+    public void delete(String key) {
         root = delete(root, key);
     }
 
-    // Recursive helper method for delete()
-    private Node delete(Node x, int key) {
-        if (x == null) return null;
-        if (key < x.key) x.left = delete(x.left, key);
-        else if (key > x.key) x.right = delete(x.right, key);
+    private Node delete(Node x, String key) {
+        if (x == null)
+            return null;
+        int cmp = key.compareTo(x.key);
+        if (cmp < 0)
+            x.left = delete(x.left, key);
+        else if (cmp > 0)
+            x.right = delete(x.right, key);
         else {
-            if (x.right == null) return x.left;
-            if (x.left == null) return x.right;
+            if (x.right == null)
+                return x.left;
+            if (x.left == null)
+                return x.right;
             Node t = x;
             x = min(t.right);
             x.right = deleteMin(t.right);
@@ -60,48 +69,44 @@ public class InventoryBST {
         return x;
     }
 
-    // Deletes the minimum node from the binary search tree
     private Node deleteMin(Node x) {
-        if (x.left == null) return x.right;
+        if (x.left == null)
+            return x.right;
         x.left = deleteMin(x.left);
         return x;
     }
 
-    // Returns the minimum node in the binary search tree
     private Node min(Node x) {
-        if (x.left == null) return x;
+        if (x.left == null)
+            return x;
         return min(x.left);
     }
 
-    // Returns true if the binary search tree contains the given key, false otherwise
-    public boolean contains(int key) {
-        return get(key) != null;
+    public boolean contains(String key) {
+        return get(key) != -1;
     }
 
-    // Returns true if the binary search tree is empty, false otherwise
     public boolean isEmpty() {
         return root == null;
     }
 
-    // Returns the number of nodes in the binary search tree
     public int size() {
         return size(root);
     }
 
-    // Recursive helper method for size()
     private int size(Node x) {
-        if (x == null) return 0;
+        if (x == null)
+            return 0;
         return 1 + size(x.left) + size(x.right);
     }
 
-    // Returns the height of the binary search tree
     public int height() {
         return height(root);
     }
 
-    // Recursive helper method for height()
     private int height(Node x) {
-        if (x == null) return -1;
+        if (x == null)
+            return -1;
         return 1 + Math.max(height(x.left), height(x.right));
     }
 }
