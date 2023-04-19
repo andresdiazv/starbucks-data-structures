@@ -1,7 +1,11 @@
+/*
+ * [Customer name] here is your order of [drinks array].
+ */
+
 import java.util.HashMap;
 import java.util.Map;
 
-public class Prepare {
+public class Prepare{
     private Drink [] orderItems;
 
     public Prepare() {

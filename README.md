@@ -8,3 +8,19 @@
 <p align="center">
     <img width="800" src="https://user-images.githubusercontent.com/112414800/232595099-61d788a4-ef69-4f77-83c6-b43512fd469d.png" alt="Material Bread logo">
 </p>
+
+Order
+INPUT:
+OUTPUT:
+
+Payment
+INPUT:
+OUTPUT:
+
+Prepare
+INPUT:
+OUTPUT:
+
+Customer
+INPUT:
+OUTPUT:

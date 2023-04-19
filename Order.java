@@ -1,9 +1,20 @@
+/*
+ * Prints: [Customer name] your order is [drinks array].
+ * Payment:
+ * 
+ * 
+ * Customer:
+ * getBalance()
+ * setBalance()
+ *
+ * 
+ */
+
 import java.util.ArrayList;
 public class Order {
     private String customerName;
     private ArrayList<Drink> drinks;
     private float orderPrice;
-    private Order next;
     private Prepare ordersList = new Prepare();
 
     public Order(String name, Drink[] items) {
@@ -36,5 +47,9 @@ public class Order {
     private void chargeCustomer() {
         Payment payment = new Payment(this.customerName, this.orderPrice);
         payment.makePayment();
+    }
+
+    private void pushOrder() {
+        ordersList.add();
     }
 }
