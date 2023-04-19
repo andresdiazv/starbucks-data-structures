@@ -9,14 +9,14 @@ public class Main {
         Scanner scanner = new Scanner(System.in);
 
         while (true) {
-            System.out.println("Enter your role: Manager or Customer (or type 'exit' to quit)");
-            String role = scanner.nextLine();
+            System.out.println("\nEnter your role: 'Manager' or 'Customer' (or type 'exit' to quit)");
+            String userRole = scanner.nextLine();
 
-            if (role.equalsIgnoreCase("Manager")) {
+            if (userRole.equalsIgnoreCase("Manager")) {
                 handleManagerOperations(scanner, inventory, menu);
-            } else if (role.equalsIgnoreCase("Customer")) {
+            } else if (userRole.equalsIgnoreCase("Customer")) {
                 handleCustomerOperations(scanner, inventory, menu);
-            } else if (role.equalsIgnoreCase("exit")) {
+            } else if (userRole.equalsIgnoreCase("exit")) {
                 break;
             } else {
                 System.out.println("Invalid role. Please enter 'Manager' or 'Customer'.");
@@ -27,52 +27,56 @@ public class Main {
     }
 
     private static void handleManagerOperations(Scanner scanner, InventoryBST inventory, Menu menu) {
-        System.out.println("Enter an operation: display, update, inventory, or exit");
-        String operation = scanner.nextLine();
+        while (true) {
+            System.out.println("Enter an operation: display, update, inventory, or exit");
+            String operation = scanner.nextLine();
 
-        if (operation.equalsIgnoreCase("display")) {
-            menu.displayMenu();
-        } else if (operation.equalsIgnoreCase("update")) {
-            System.out.println("Enter the drink name:");
-            String drinkName = scanner.nextLine();
-            System.out.println("Enter the new price:");
-            double newPrice = Double.parseDouble(scanner.nextLine());
-            menu.updateDrinkPrice(drinkName, newPrice);
-            System.out.println("Drink price updated.");
-        } else if (operation.equalsIgnoreCase("inventory")) {
-            handleInventoryOperations(scanner, inventory);
-        } else if (operation.equalsIgnoreCase("exit")) {
-            return;
-        } else {
-            System.out.println("Invalid operation.");
+            if (operation.equalsIgnoreCase("display")) {
+                menu.displayMenu();
+            } else if (operation.equalsIgnoreCase("update")) {
+                System.out.println("Enter the drink name:");
+                String drinkName = scanner.nextLine();
+                System.out.println("Enter the new price:");
+                double newPrice = Double.parseDouble(scanner.nextLine());
+                menu.updateDrinkPrice(drinkName, newPrice);
+                System.out.println("Drink price updated.");
+            } else if (operation.equalsIgnoreCase("inventory")) {
+                handleInventoryOperations(scanner, inventory);
+            } else if (operation.equalsIgnoreCase("exit")) {
+                break;
+            } else {
+                System.out.println("Invalid operation.");
+            }
         }
     }
 
     private static void handleCustomerOperations(Scanner scanner, InventoryBST inventory, Menu menu) {
-        System.out.println("Enter an operation: display or purchase (or type 'exit' to go back)");
-        String operation = scanner.nextLine();
+        while (true) {
+            System.out.println("Enter an operation: display or purchase (or type 'exit' to go back)");
+            String operation = scanner.nextLine();
 
-        if (operation.equalsIgnoreCase("display")) {
-            menu.displayMenu();
-        } else if (operation.equalsIgnoreCase("purchase")) {
-            System.out.println("Enter the drink name:");
-            String drinkName = scanner.nextLine();
+            if (operation.equalsIgnoreCase("display")) {
+                menu.displayMenu();
+            } else if (operation.equalsIgnoreCase("purchase")) {
+                System.out.println("Enter the drink name:");
+                String drinkName = scanner.nextLine();
 
-            if (menu.isDrinkAvailable(drinkName, inventory)) {
-                Drink drink = menu.getDrink(drinkName);
-                for (Map.Entry<String, Integer> ingredientEntry : drink.getIngredients().entrySet()) {
-                    String ingredientName = ingredientEntry.getKey();
-                    int ingredientQuantity = ingredientEntry.getValue();
-                    inventory.put(ingredientName, inventory.get(ingredientName) - ingredientQuantity);
+                if (menu.isDrinkAvailable(drinkName, inventory)) {
+                    Drink drink = menu.getDrink(drinkName);
+                    for (Map.Entry<String, Integer> ingredientEntry : drink.getIngredients().entrySet()) {
+                        String ingredientName = ingredientEntry.getKey();
+                        int ingredientQuantity = ingredientEntry.getValue();
+                        inventory.put(ingredientName, inventory.get(ingredientName) - ingredientQuantity);
+                    }
+                    System.out.println("Drink purchased.");
+                } else {
+                    System.out.println("Drink not available.");
                 }
-                System.out.println("Drink purchased.");
+            } else if (operation.equalsIgnoreCase("exit")) {
+                break;
             } else {
-                System.out.println("Drink not available.");
+                System.out.println("Invalid operation.");
             }
-        } else if (operation.equalsIgnoreCase("exit")) {
-            return;
-        } else {
-            System.out.println("Invalid operation.");
         }
     }
 

@@ -61,11 +61,12 @@ public class Menu {
     }
 
     public void displayMenu() {
-        System.out.println("Menu:");
+        System.out.println("\nMenu:");
         for (Map.Entry<String, Drink> entry : menuItems.entrySet()) {
             Drink drink = entry.getValue();
             System.out.printf("%s - $%.2f%n", drink.getName(), drink.getPrice());
         }
+        System.out.print("\n");
     }
 
     public void updateDrinkPrice(String drinkName, double newPrice) {
