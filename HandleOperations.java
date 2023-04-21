@@ -71,7 +71,7 @@ public class HandleOperations {
     }
 
     public void handleCustomerOperations(Scanner scanner, InventoryBST inventory, Menu menu) {
-        Customer customer = selectCustomerRole(scanner);
+        Customers customer = selectCustomerRole(scanner);
         if (customer == null) {
             return;
         }
@@ -92,7 +92,7 @@ public class HandleOperations {
         }
     }
 
-    private Customer selectCustomerRole(Scanner scanner) {
+    private Customers selectCustomerRole(Scanner scanner) {
         Random random = new Random();
 
         while (true) {
@@ -100,12 +100,12 @@ public class HandleOperations {
             String customerRole = scanner.nextLine();
 
             if (customerRole.equalsIgnoreCase("Rich")) {
-                return new Customer(1000);
+                return new Customers(1000);
             } else if (customerRole.equalsIgnoreCase("Mystery")) {
                 double mysteryBalance = 1 + random.nextInt(200);
-                return new Customer(mysteryBalance);
+                return new Customers(mysteryBalance);
             } else if (customerRole.equalsIgnoreCase("Poor")) {
-                return new Customer(5);
+                return new Customers(5);
             } else if (customerRole.equalsIgnoreCase("exit")) {
                 return null;
             } else {
@@ -114,12 +114,12 @@ public class HandleOperations {
         }
     }
 
-    private void handlePurchaseOperation(Scanner scanner, InventoryBST inventory, Menu menu, Customer customer) {
+    private void handlePurchaseOperation(Scanner scanner, InventoryBST inventory, Menu menu, Customers customer) {
         System.out.println("Enter the drink name:");
         String drinkName = scanner.nextLine();
 
         if (menu.isDrinkAvailable(drinkName, inventory)) {
-            Drink drink = menu.getDrink(drinkName);
+            DrinkHashTable drink = menu.getDrink(drinkName);
             double drinkPrice = drink.getPrice();
 
             if (customer.getBalance() >= drinkPrice) {

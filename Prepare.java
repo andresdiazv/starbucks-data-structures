@@ -1,10 +1,22 @@
+/*
+ * Takes in a linked list of ingredients.
+ * Removes each ingredient from the inventory. 
+ * Produces a drink. 
+ * Outputs: [Customer name] here is your order of [drinks array].
+ * Most methods need to be repaired. Specifically, execute order has to work with inventory.
+ */
+
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-public class Prepare {
-    private Drink [] orderItems;
+public class Prepare{
+    private ArrayList<Drink> orderItems;
 
-    public Prepare() {
+    private DrinkHashTable drinks = new DrinkHashTable();
+    private InventoryBST inventory = new InventoryBST();
+    
+    public Prepare(ArrayList<Drink> items) {
         this.orderItems = items;
     }
 
