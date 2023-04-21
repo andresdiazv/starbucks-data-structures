@@ -1,25 +1,29 @@
-import java.util.HashMap;
+import java.util.ArrayList;
 
-public class Drink {
+class Drink{
     private String name;
-    private double price;
-    private HashMap<String, Integer> ingredients;
+    private Double price;
+    private Ingredients ingredients;
 
-    public Drink(String name, double price, HashMap<String, Integer> ingredients) {
-        this.name = name;
-        this.price = price;
-        this.ingredients = ingredients;
+    public Drink(String n, double p, Ingredients i){
+        this.name = n;
+        this.price = p;
+        this.ingredients = i;
     }
 
-    public String getName() {
-        return name;
+    public double getPrice(){
+        return this.price;
     }
 
-    public double getPrice() {
-        return price;
+    public Ingredients getIngredients(){
+        return this.ingredients;
     }
 
-    public HashMap<String, Integer> getIngredients() {
-        return ingredients;
+    public ArrayList<String> toStringArrayList(){
+        ArrayList<String> drinkString = new ArrayList<>();
+        drinkString.add(name);
+        drinkString.add(price.toString());
+        drinkString.add(ingredients.toString());
+        return drinkString;
     }
 }

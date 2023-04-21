@@ -1,8 +1,8 @@
 import java.util.Comparator;
 
-public class DrinkComparator implements Comparator<Drink> {
+public class DrinkComparator implements Comparator<DrinkHashTable> {
     @Override
-    public int compare(Drink drink1, Drink drink2) {
+    public int compare(DrinkHashTable drink1, DrinkHashTable drink2) {
         int priceComparison = Double.compare(drink1.getPrice(), drink2.getPrice());
         if (priceComparison != 0) {
             return priceComparison;
