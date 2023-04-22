@@ -7,8 +7,12 @@ public class Payment {
         this.prepare = prepare;
     }
 
-    public void makePayment() {
-        System.out.println("Payment of $" + total + " processed successfully.");
-        prepare.executeOrder();
+    public double makePayment(double price, double customerBalance) throws InsufficientBalanceException {
+        if (customerBalance >= price) {
+            double newBalance = customerBalance - price;
+            return newBalance;
+        } else {
+            throw new InsufficientBalanceException("Insufficient balance.");
+        }
     }
 }
