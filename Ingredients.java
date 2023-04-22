@@ -1,39 +1,62 @@
-/*
- * Stores ingredients in LinkedList with ingredient name and amount.
- */
-
- public class Ingredients{
+public class Ingredients {
     private Ingredient head = null;
 
-    public void addIngredient(String ingredient, int amount){
-        Ingredient i = new Ingredient(ingredient, amount);
-
-        if(head == null){
-            head = i;
-        }
-        else {
+    public void addIngredient(String ingredient, int amount) {
+        if (head == null) {
+            head = new Ingredient(ingredient, amount);
+        } else {
             Ingredient current = head;
-            while(current.next != null){
+            while (current.next != null) {
+                if (current.ingredient.equals(ingredient)) {
+                    current.amount += amount;
+                    return;
+                }
                 current = current.next;
             }
-            current.next = i;
+            if (current.ingredient.equals(ingredient)) {
+                current.amount += amount;
+            } else {
+                current.next = new Ingredient(ingredient, amount);
+            }
         }
     }
 
-    private class Ingredient{
+    public int getAmount(String ingredientName) {
+        Ingredient current = head;
+        while (current != null) {
+            if (current.ingredient.equals(ingredientName)) {
+                return current.amount;
+            }
+            current = current.next;
+        }
+        return 0;
+    }
 
+    public Ingredient getHead() {
+        return head;
+    }
+
+    public static class Ingredient {
         private String ingredient;
         private int amount;
         private Ingredient next;
 
-        public Ingredient(String i, int a){
-            this.ingredient = i;
-            this.amount = a;
+        public Ingredient(String ingredient, int amount) {
+            this.ingredient = ingredient;
+            this.amount = amount;
             this.next = null;
         }
 
-        // public String toString() {
-        //     return amount + " " + ingredient;
-        // }
-    }   
+        public String getIngredient() {
+            return this.ingredient;
+        }
+
+        public int getAmount() {
+            return this.amount;
+        }
+
+        public Ingredient getNext() {
+            return this.next;
+        }
+    }
 }

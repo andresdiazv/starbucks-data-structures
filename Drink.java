@@ -1,29 +1,40 @@
 import java.util.ArrayList;
 
-class Drink{
+class Drink {
     private String name;
     private Double price;
     private Ingredients ingredients;
 
-    public Drink(String n, double p, Ingredients i){
-        this.name = n;
-        this.price = p;
-        this.ingredients = i;
+    // constructor for Drink
+    public Drink(String name, double price, Ingredients ingredients) {
+        this.name = name;
+        this.price = price;
+        this.ingredients = ingredients;
     }
 
-    public double getPrice(){
+    // getters for Drink
+    // gets name of drink
+    public String getName() {
+        return this.name;
+    }
+
+    // gets price of drink
+    public double getPrice() {
         return this.price;
     }
 
-    public Ingredients getIngredients(){
+    // gets ingredients of drink
+    public Ingredients getIngredients() {
         return this.ingredients;
     }
 
-    public ArrayList<String> toStringArrayList(){
-        ArrayList<String> drinkString = new ArrayList<>();
-        drinkString.add(name);
-        drinkString.add(price.toString());
-        drinkString.add(ingredients.toString());
-        return drinkString;
+    @Override
+    public String toString() {
+        return "Drink{" +
+                "name='" + name + '\'' +
+                ", price=" + price +
+                ", ingredients=" + ingredients +
+                '}';
     }
+
 }

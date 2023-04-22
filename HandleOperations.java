@@ -70,9 +70,9 @@ public class HandleOperations {
         }
     }
 
-    public void handleCustomerOperations(Scanner scanner, InventoryBST inventory, Menu menu) {
-        Customers customer = selectCustomerRole(scanner);
-        if (customer == null) {
+    public void handleCustomerOperations(Scanner scanner, InventoryBST inventory, Menu menu, Customers customers) {
+        String customerName = selectCustomerRole(scanner, customers);
+        if (customerName == null) {
             return;
         }
 
@@ -83,7 +83,7 @@ public class HandleOperations {
             if (operation.equalsIgnoreCase("display")) {
                 menu.displayMenu();
             } else if (operation.equalsIgnoreCase("purchase")) {
-                handlePurchaseOperation(scanner, inventory, menu, customer);
+                handlePurchaseOperation(scanner, inventory, menu, customers, customerName);
             } else if (operation.equalsIgnoreCase("exit")) {
                 break;
             } else {
@@ -92,44 +92,44 @@ public class HandleOperations {
         }
     }
 
-    private Customers selectCustomerRole(Scanner scanner) {
+    private String selectCustomerRole(Scanner scanner, Customers customers) {
         Random random = new Random();
 
         while (true) {
-            System.out.println("Choose a customer role: 'Rich' or 'Poor' (or type 'exit' to go back)");
-            String customerRole = scanner.nextLine();
+            System.out.println("Enter customer name (or type 'exit' to go back):");
+            String customerName = scanner.nextLine();
 
-            if (customerRole.equalsIgnoreCase("Rich")) {
-                return new Customers(1000);
-            } else if (customerRole.equalsIgnoreCase("Mystery")) {
-                double mysteryBalance = 1 + random.nextInt(200);
-                return new Customers(mysteryBalance);
-            } else if (customerRole.equalsIgnoreCase("Poor")) {
-                return new Customers(5);
-            } else if (customerRole.equalsIgnoreCase("exit")) {
+            if (customerName.equalsIgnoreCase("exit")) {
                 return null;
             } else {
-                System.out.println("Invalid role. Please enter 'Rich', 'Poor', or 'Mystery'.");
+                System.out.println("Enter customer balance:");
+                double customerBalance = Double.parseDouble(scanner.nextLine());
+                customers.addCustomer(customerName, customerBalance);
+                return customerName;
             }
         }
     }
 
-    private void handlePurchaseOperation(Scanner scanner, InventoryBST inventory, Menu menu, Customers customer) {
+    private void handlePurchaseOperation(Scanner scanner, InventoryBST inventory, Menu menu, Customers customers,
+            String customerName) {
         System.out.println("Enter the drink name:");
         String drinkName = scanner.nextLine();
 
         if (menu.isDrinkAvailable(drinkName, inventory)) {
-            DrinkHashTable drink = menu.getDrink(drinkName);
+            Drink drink = menu.getDrink(drinkName);
             double drinkPrice = drink.getPrice();
 
-            if (customer.getBalance() >= drinkPrice) {
-                for (Map.Entry<String, Integer> ingredientEntry : drink.getIngredients().entrySet()) {
+            double customerBalance = customers.getCustomerBalance(customerName);
+
+            if (customerBalance >= drinkPrice) {
+                for (Map.Entry<String, Integer> ingredientEntry : drink.getIngredients().getIngredients().entrySet()) {
                     String ingredientName = ingredientEntry.getKey();
                     int ingredientQuantity = ingredientEntry.getValue();
                     inventory.put(ingredientName, inventory.get(ingredientName) - ingredientQuantity);
                 }
-                customer.setBalance(customer.getBalance() - drinkPrice);
-                System.out.println("Drink purchased. Remaining balance: $" + customer.getBalance());
+                customers.updateCustomerBalance(customerName, customerBalance - drinkPrice);
+                System.out
+                        .println("Drink purchased. Remaining balance: $" + customers.getCustomerBalance(customerName));
             } else {
                 System.out.println("Insufficient balance. Drink not purchased.");
             }

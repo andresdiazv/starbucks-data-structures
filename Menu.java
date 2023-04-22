@@ -10,71 +10,92 @@ import java.util.List;
 import java.util.ArrayList;
 
 public class Menu {
-    private DrinkHashTable drinksMenu = new DrinkHashTable();
-    
+    private HashMap<String, Drink> drinksMenu = new HashMap<>();
+
     public Menu(InventoryBST inventory) {
         addDrinks(inventory);
     }
 
     private void addDrinks(InventoryBST inventory) {
         Ingredients americanoIngredients = new Ingredients();
-        americanoIngredients.addIngredient("Espresso", 2);
+        americanoIngredients.addIngredient("Espresso", 3);
         americanoIngredients.addIngredient("Water", 1);
-        americanoIngredients.addIngredient("Espresso", 2);
-        drinksMenu.addDrink("americano", 2.75, americanoIngredients);
+        drinksMenu.put("Americano", new Drink("Americano", 2.50, americanoIngredients));
 
         Ingredients latteIngredients = new Ingredients();
-        latteIngredients.addIngredient("Espresso", 1);
-        latteIngredients.addIngredient("Milk", 1);
-        drinksMenu.addDrink("Latte", 3.25, latteIngredients);
+        latteIngredients.addIngredient("Espresso", 2);
+        latteIngredients.addIngredient("Steamed Milk", 1);
+        drinksMenu.put("Latte", new Drink("Latte", 3.00, latteIngredients));
 
         Ingredients cappuccinoIngredients = new Ingredients();
-        cappuccinoIngredients.addIngredient("Espresso", 1);
-        cappuccinoIngredients.addIngredient("Milk", 1);
-        cappuccinoIngredients.addIngredient("Foam", 1);
-        drinksMenu.addDrink("Cappuccino", 3.50, cappuccinoIngredients);
+        cappuccinoIngredients.addIngredient("Espresso", 2);
+        cappuccinoIngredients.addIngredient("Foamed Milk", 1);
+        drinksMenu.put("Cappuccino", new Drink("Cappuccino", 3.00, cappuccinoIngredients));
 
         Ingredients mochaIngredients = new Ingredients();
-        mochaIngredients.addIngredient("Espresso", 1);
-        mochaIngredients.addIngredient("Milk", 1);
-        mochaIngredients.addIngredient("Chocolate", 1);
-        drinksMenu.addDrink("Mocha", 3.75, mochaIngredients);
+        mochaIngredients.addIngredient("Espresso", 2);
+        mochaIngredients.addIngredient("Mocha Syrup", 1);
+        mochaIngredients.addIngredient("Steamed Milk", 1);
+        drinksMenu.put("Mocha", new Drink("Mocha", 3.50, mochaIngredients));
+
+    }
+
+    public void displayMenu(InventoryBST inventory) {
+        List<Drink> drinks = new ArrayList<>(drinksMenu.values());
+        List<Drink> sortedDrinks = DrinkSorter.sortDrinks(drinks);
+
+        System.out.println("\nMenu:");
+        for (Drink drink : sortedDrinks) {
+            String availability;
+            if (isDrinkAvailable(drink.getName(), inventory)) {
+                availability = "Available";
+            } else {
+                availability = "Unavailable";
+            }
+            System.out.printf("%s - $%.2f (%s)%n", drink.getName(), drink.getPrice(), availability);
+        }
+        System.out.print("\n");
     }
 
     public boolean isDrinkAvailable(String drinkName, InventoryBST inventory) {
-        DrinkHashTable drink = menuItems.get(drinkName);
+
+        Drink drink = drinksMenu.get(drinkName);
         if (drink == null) {
             return false;
         }
 
-        for (Map.Entry<String, Integer> ingredient : drink.getIngredients().entrySet()) {
-            String ingredientName = ingredient.getKey();
-            int requiredAmount = ingredient.getValue();
+        Ingredients requiredIngredients = drink.getIngredients();
+        Ingredient currentIngredient = requiredIngredients.getHead();
 
-            if (inventory.get(ingredientName) < requiredAmount) {
+        while (currentIngredient != null) {
+            String ingredientName = currentIngredient.getIngredient();
+            int requiredQuantity = currentIngredient.getAmount();
+
+            int availableQuantity = inventory.get(ingredientName);
+            if (availableQuantity < requiredQuantity) {
                 return false;
             }
+            currentIngredient = currentIngredient.getNext();
         }
 
         return true;
     }
 
-    public void displayMenu() {
-        List<DrinkHashTable> drinks = new ArrayList<>(menuItems.values());
-        List<DrinkHashTable> sortedDrinks = DrinkSorter.sortDrinks(drinks);
-
-        System.out.println("\nMenu:");
-        for (DrinkHashTable drink : sortedDrinks) {
-            System.out.printf("%s - $%.2f%n", drink.getName(), drink.getPrice());
-        }
-        System.out.print("\n");
-    }
-
     public void updateDrinkPrice(String drinkName, double newPrice) {
-        DrinkHashTable drink = menuItems.get(drinkName);
+        // gets the drink from the menu
+        Drink drink = drinksMenu.get(drinkName);
+
+        // if the drink exists, update the price
         if (drink != null) {
-            HashMap<String, Integer> ingredients = drink.getIngredients();
-            menuItems.put(drinkName, new DrinkHashTable(drinkName, newPrice, ingredients));
+            // gets ingredients to keep the same ingredients as before
+            Ingredients ingredients = drink.getIngredients();
+            // updates the drink in the menu with the new price
+            drinksMenu.put(drinkName, new Drink(drinkName, newPrice, ingredients));
         }
     }
+
+    public Drink getDrink(String drinkName) {
+        return drinksMenu.get(drinkName);
+    }
+
 }
