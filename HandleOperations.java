@@ -96,46 +96,58 @@ public class HandleOperations {
         Random random = new Random();
 
         while (true) {
-            System.out.println("Enter customer name (or type 'exit' to go back):");
-            String customerName = scanner.nextLine();
+            System.out.println("Choose a customer role: 'Rich', 'Poor', or 'Mystery' (or type 'exit' to go back)");
+            String customerRole = scanner.nextLine();
 
-            if (customerName.equalsIgnoreCase("exit")) {
+            if (customerRole.equalsIgnoreCase("Rich")) {
+                customers.addCustomer("Rich", 1000);
+                return "Rich";
+            } else if (customerRole.equalsIgnoreCase("Mystery")) {
+                double mysteryBalance = 1 + random.nextInt(200);
+                customers.addCustomer("Mystery", mysteryBalance);
+                return "Mystery";
+            } else if (customerRole.equalsIgnoreCase("Poor")) {
+                customers.addCustomer("Poor", 5);
+                return "Poor";
+            } else if (customerRole.equalsIgnoreCase("exit")) {
                 return null;
             } else {
-                System.out.println("Enter customer balance:");
-                double customerBalance = Double.parseDouble(scanner.nextLine());
-                customers.addCustomer(customerName, customerBalance);
-                return customerName;
+                System.out.println("Invalid role. Please enter 'Rich', 'Poor', or 'Mystery'.");
             }
         }
     }
 
-    private void handlePurchaseOperation(Scanner scanner, InventoryBST inventory, Menu menu, Customers customers,
-                                         String customerName) {
-        System.out.println("Enter the drink name:");
+    public void handlePurchaseOperation(Scanner scanner, InventoryBST inventory, Menu menu, Customers customers, String customerName) {
+        System.out.print("Enter the drink name: ");
         String drinkName = scanner.nextLine();
 
         if (menu.isDrinkAvailable(drinkName, inventory)) {
             Drink drink = menu.getDrink(drinkName);
-            Ingredients ingredients = drink.getIngredients();
             double drinkPrice = drink.getPrice();
 
             double customerBalance = customers.getCustomerBalance(customerName);
 
             if (customerBalance >= drinkPrice) {
-                for (Map.Entry<String, Integer> ingredientEntry : ingredients.getIngredients().entrySet()) {
-                    String ingredientName = ingredientEntry.getKey();
-                    int ingredientQuantity = ingredientEntry.getValue();
-                    inventory.put(ingredientName, inventory.get(ingredientName) - ingredientQuantity);
+                double newBalance = customerBalance - drinkPrice;
+                customers.updateCustomerBalance(customerName, newBalance);
+
+                Ingredients requiredIngredients = drink.getIngredients();
+                Ingredients.Ingredient currentIngredient = requiredIngredients.getHead();
+
+                while (currentIngredient != null) {
+                    String ingredientName = currentIngredient.getIngredient();
+                    int requiredQuantity = currentIngredient.getAmount();
+                    inventory.put(ingredientName, inventory.get(ingredientName) - requiredQuantity);
+                    currentIngredient = currentIngredient.getNext();
                 }
-                customers.updateCustomerBalance(customerName, customerBalance - drinkPrice);
-                System.out
-                        .println("Drink purchased. Remaining balance: $" + customers.getCustomerBalance(customerName));
+
+                System.out.println("Drink purchased successfully.");
+                System.out.printf("New balance for %s: $%.2f%n", customerName, newBalance);
             } else {
-                System.out.println("Insufficient balance. Drink not purchased.");
+                System.out.println("Insufficient funds.");
             }
         } else {
-            System.out.println("Drink not available.");
+            System.out.println("Drink not available due to insufficient ingredients.");
         }
     }
 
