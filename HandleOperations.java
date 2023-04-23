@@ -10,7 +10,7 @@ public class HandleOperations {
             String operation = scanner.nextLine();
 
             if (operation.equalsIgnoreCase("display")) {
-                menu.displayMenu();
+                menu.displayMenu(inventory);
             } else if (operation.equalsIgnoreCase("inventory")) {
                 handleInventoryOperations(scanner, inventory);
             } else if (operation.equalsIgnoreCase("exit")) {
@@ -81,7 +81,7 @@ public class HandleOperations {
             String operation = scanner.nextLine();
 
             if (operation.equalsIgnoreCase("display")) {
-                menu.displayMenu();
+                menu.displayMenu(inventory);
             } else if (operation.equalsIgnoreCase("purchase")) {
                 handlePurchaseOperation(scanner, inventory, menu, customers, customerName);
             } else if (operation.equalsIgnoreCase("exit")) {

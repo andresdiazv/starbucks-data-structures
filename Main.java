@@ -15,7 +15,7 @@ public class Main {
             if (userRole.equalsIgnoreCase("Manager")) {
                 handleOperations.handleManagerOperations(scanner, inventory, menu);
             } else if (userRole.equalsIgnoreCase("Customer")) {
-                handleOperations.handleCustomerOperations(scanner, inventory, menu,);
+                handleOperations.handleCustomerOperations(scanner, inventory, menu);
             } else if (userRole.equalsIgnoreCase("exit")) {
                 break;
             } else {

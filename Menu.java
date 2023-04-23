@@ -65,7 +65,7 @@ public class Menu {
         }
 
         Ingredients requiredIngredients = drink.getIngredients();
-        Ingredient currentIngredient = requiredIngredients.getHead();
+        Ingredients.Ingredient currentIngredient = requiredIngredients.getHead();
 
         while (currentIngredient != null) {
             String ingredientName = currentIngredient.getIngredient();
