@@ -83,7 +83,7 @@ public class HandleOperations {
             if (operation.equalsIgnoreCase("display")) {
                 menu.displayMenu(inventory);
             } else if (operation.equalsIgnoreCase("purchase")) {
-                handlePurchaseOperation(scanner, inventory, menu, customers, customerName);
+                handlePurchaseOperation(scanner, inventory, menu, customers);
             } else if (operation.equalsIgnoreCase("exit")) {
                 break;
             } else {
@@ -110,32 +110,40 @@ public class HandleOperations {
         }
     }
 
-    private void handlePurchaseOperation(Scanner scanner, InventoryBST inventory, Menu menu, Customers customers,
-                                         String customerName) {
-        System.out.println("Enter the drink name:");
+    public void handlePurchaseOperation(Scanner scanner, InventoryBST inventory, Menu menu, Customers customers) {
+        System.out.print("Enter the drink name: ");
         String drinkName = scanner.nextLine();
 
         if (menu.isDrinkAvailable(drinkName, inventory)) {
             Drink drink = menu.getDrink(drinkName);
-            Ingredients ingredients = drink.getIngredients();
             double drinkPrice = drink.getPrice();
+
+            System.out.print("Enter the customer's name: ");
+            String customerName = scanner.nextLine();
 
             double customerBalance = customers.getCustomerBalance(customerName);
 
             if (customerBalance >= drinkPrice) {
-                for (Map.Entry<String, Integer> ingredientEntry : ingredients.getIngredients().entrySet()) {
-                    String ingredientName = ingredientEntry.getKey();
-                    int ingredientQuantity = ingredientEntry.getValue();
-                    inventory.put(ingredientName, inventory.get(ingredientName) - ingredientQuantity);
+                double newBalance = customerBalance - drinkPrice;
+                customers.updateCustomerBalance(customerName, newBalance);
+
+                Ingredients requiredIngredients = drink.getIngredients();
+                Ingredients.Ingredient currentIngredient = requiredIngredients.getHead();
+
+                while (currentIngredient != null) {
+                    String ingredientName = currentIngredient.getIngredient();
+                    int requiredQuantity = currentIngredient.getAmount();
+                    inventory.put(ingredientName, inventory.get(ingredientName) - requiredQuantity);
+                    currentIngredient = currentIngredient.getNext();
                 }
-                customers.updateCustomerBalance(customerName, customerBalance - drinkPrice);
-                System.out
-                        .println("Drink purchased. Remaining balance: $" + customers.getCustomerBalance(customerName));
+
+                System.out.println("Drink purchased successfully.");
+                System.out.printf("New balance for %s: $%.2f%n", customerName, newBalance);
             } else {
-                System.out.println("Insufficient balance. Drink not purchased.");
+                System.out.println("Insufficient funds.");
             }
         } else {
-            System.out.println("Drink not available.");
+            System.out.println("Drink not available due to insufficient ingredients.");
         }
     }
 

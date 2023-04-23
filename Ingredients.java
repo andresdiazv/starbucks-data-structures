@@ -4,7 +4,9 @@ import java.util.Map;
 public class Ingredients {
     private Ingredient head = null;
 
+
     public void addIngredient(String ingredient, int amount) {
+
         if (head == null) {
             head = new Ingredient(ingredient, amount);
         } else {
@@ -64,6 +66,7 @@ public class Ingredients {
         return head;
     }
 
+
     public static class Ingredient {
         private String ingredient;
         private int amount;
@@ -98,6 +101,7 @@ public class Ingredients {
         public String getIngredient() {
             return this.ingredient;
         }
+
 
         public int getAmount() {
             return this.amount;
