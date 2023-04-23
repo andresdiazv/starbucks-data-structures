@@ -1,27 +1,28 @@
-/*
- *
- * Need to add: check for inventory, check for sufficient funds
- * 
- */
 import java.util.ArrayList;
 import java.util.Scanner;
+
 public class Order {
     private String customerName;
     private ArrayList<Drink> customerOrder;
-    private float orderPrice;
+    private double orderPrice;
 
-    private Menu menu = new Menu(null);
-    private DrinkHashTable drinks = new DrinkHashTable();
-    private Customers customers = new Customers();
-    private InventoryBST inventory = new InventoryBST();
+    private Menu menu;
+    private DrinkHashTable drinks;
+    private Customers customers;
+    private InventoryBST inventory;
 
-    public Order(String name) {
+    public Order(String name, Menu menu, DrinkHashTable drinks, Customers customers, InventoryBST inventory) {
         this.customerName = name;
         this.customerOrder = new ArrayList<>();
         this.orderPrice = 0;
+
+        this.menu = menu;
+        this.drinks = drinks;
+        this.customers = customers;
+        this.inventory = inventory;
     }
 
-    public void getOrder(){
+    public void getOrder() throws InsufficientInventoryException {
         Scanner scanner = new Scanner(System.in);
         boolean orderComplete = false;
         while(!orderComplete){
@@ -31,32 +32,43 @@ public class Order {
                 menu.displayMenu();
                 System.out.println("Please select a drink:");
                 String selection = scanner.nextLine();
-                scanner.nextLine();
                 Drink tempDrink = drinks.getDrink(selection);
-                if(Payment.sufficientFunds(customers, customerName, orderPrice + tempDrink.getPrice())){
+                if(tempDrink == null) {
+                    System.out.println("Invalid selection. Please try again.");
+                    continue;
+                }
+                if(inventory.get(tempDrink.getName()) <= 0) {
+                    System.out.println("Sorry, we are out of " + tempDrink.getName() + ". Please select a different drink.");
+                    continue;
+                }
+                double totalPrice = orderPrice + tempDrink.getPrice();
+                if(Payment.sufficientFunds(customers, customerName, totalPrice)){
                     addToOrder(tempDrink);
-                    System.out.println(selection + " has been added to your order.");    
+                    System.out.println(tempDrink.getName() + " has been added to your order.");
+                    orderPrice = totalPrice;
                 }
                 else{
                     System.out.println("You don't have sufficient funds for that item.");
                 }
+            } else {
+                orderComplete = true;
             }
         }
         Payment.makePayment(customers, customerName, orderPrice);
-        Prepare.prepareOrder(inventory, customerOrder);
+        Prepare prepare = new Prepare(customerOrder);
+        prepare.executeOrder(inventory);
         System.out.println(customerName + ", your order of " + customerOrder.toString() + " is being prepared.");
     }
 
     public void addToOrder(Drink drink){
         customerOrder.add(drink);
-        orderPrice += drink.getPrice();
     }
 
     public void removeFromOrder(String drinkName){
         customerOrder.remove(drinks.getDrink(drinkName));
     }
 
-    public float getOrderPrice() {
+    public double getOrderPrice() {
         return this.orderPrice;
     }
 }

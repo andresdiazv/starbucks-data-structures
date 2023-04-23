@@ -10,27 +10,28 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-public class Prepare{
-    private ArrayList<Drink> orderItems;
 
-    private DrinkHashTable drinks = new DrinkHashTable();
-    private InventoryBST inventory = new InventoryBST();
-    
-    public Prepare(ArrayList<Drink> items) {
+
+
+public class Prepare {
+    private ArrayList<Drink> orderItems;
+    private Map<String, Double> prices;
+    private InventoryBST inventory;
+
+    public Prepare(ArrayList<Drink> items, Map<String, Double> prices, InventoryBST inventory) {
         this.orderItems = items;
+        this.prices = prices;
+        this.inventory = inventory;
     }
 
     public void executeOrder(Map<String, Integer> order) throws InsufficientInventoryException {
         for (Map.Entry<String, Integer> entry : order.entrySet()) {
             String drinkName = entry.getKey();
             int quantity = entry.getValue();
-            if (!inventory.containsKey(drinkName) || inventory.get(drinkName) < quantity) {
-                throw new InsufficientInventoryException(drinkName + " is not available in sufficient quantity.");
-            }
-            inventory.put(drinkName, inventory.get(drinkName) - quantity);
             double totalPrice = prices.get(drinkName) * quantity;
             System.out.println(quantity + "x " + drinkName + ": $" + totalPrice);
         }
+        inventory.processOrder(order);
         System.out.println("Order prepared successfully.");
     }
 
@@ -42,14 +43,12 @@ public class Prepare{
         this.prices = prices;
     }
 
-    public Map<String, Integer> getInventory() {
+    public InventoryBST getInventory() {
         return inventory;
     }
 
-    public void setInventory(Map<String, Integer> inventory) {
+    public void setInventory(InventoryBST inventory) {
         this.inventory = inventory;
     }
-
-    public void executeOrder() {
-    }
 }
+

@@ -122,7 +122,7 @@ public class HandleOperations {
             double customerBalance = customers.getCustomerBalance(customerName);
 
             if (customerBalance >= drinkPrice) {
-                for (Map.Entry<String, Integer> ingredientEntry : drink.getIngredients().getIngredients().entrySet()) {
+                for (Map.Entry<String, Integer> ingredientEntry : drink.getIngredients().getIngredient().entrySet()) {
                     String ingredientName = ingredientEntry.getKey();
                     int ingredientQuantity = ingredientEntry.getValue();
                     inventory.put(ingredientName, inventory.get(ingredientName) - ingredientQuantity);

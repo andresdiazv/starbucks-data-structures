@@ -5,15 +5,16 @@
 public class Payment {
 
     public static boolean sufficientFunds(Customers customers, String name, double total){
-        if(customers.getCustomerBalance(name) <= total){
-            return true;
+        if(customers.getCustomerBalance(name) >= total){
+            return false;
         }
-        return false;
+        return true;
     }
 
     public static void makePayment(Customers customers, String name, double total) {
-        customers.updateCustomerBalance(name, total);
-        double newBalance = customers.getCustomerBalance(name);
+        double balance = customers.getCustomerBalance(name);
+        double newBalance = balance - total;
+        customers.updateCustomerBalance(name, newBalance);
         System.out.println(name + ", your payment has processed. Your new balance is " + newBalance + ".");
     }
 }

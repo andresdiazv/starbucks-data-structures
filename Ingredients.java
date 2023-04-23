@@ -21,6 +21,31 @@ public class Ingredients {
         }
     }
 
+    public void removeIngredient(String ingredientName, int amount) {
+        Ingredient current = head;
+        Ingredient previous = null;
+
+        while (current != null) {
+            if (current.ingredient.equals(ingredientName)) {
+                if (current.amount <= amount) {
+                    // Remove the entire node
+                    if (previous == null) {
+                        // Remove the head node
+                        head = current.next;
+                    } else {
+                        previous.next = current.next;
+                    }
+                } else {
+                    // Decrease the amount in the node
+                    current.amount -= amount;
+                }
+                return;
+            }
+            previous = current;
+            current = current.next;
+        }
+    }
+
     public int getAmount(String ingredientName) {
         Ingredient current = head;
         while (current != null) {
