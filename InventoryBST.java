@@ -3,7 +3,14 @@ import java.util.Map;
 import java.util.Arrays;
 public class InventoryBST {
     private Node root;
+    public InventoryBST() {
+        initializeInventory();
+    }
 
+    private void initializeInventory() {
+        put("Espresso", 10);
+        put("Water", 20);
+    }
     private class Node {
         public Ingredients value;
         private String key;

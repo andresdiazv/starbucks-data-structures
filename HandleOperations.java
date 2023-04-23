@@ -28,40 +28,40 @@ import java.util.Random;
                 String operation = scanner.nextLine();
 
                 if (operation.equalsIgnoreCase("insert")) {
-                    System.out.println("Enter the item name:");
+                    System.out.println("Enter the ingredient name:");
                     String name = scanner.nextLine();
-                    System.out.println("Enter the item quantity:");
+                    System.out.println("Enter the ingredient quantity:");
                     int quantity = Integer.parseInt(scanner.nextLine());
                     inventory.put(name, quantity);
-                    System.out.println("Item added to inventory.");
+                    System.out.println("Ingredient added to inventory.");
                 } else if (operation.equalsIgnoreCase("delete")) {
-                    System.out.println("Enter the item name:");
+                    System.out.println("Enter the Ingredient name:");
                     String name = scanner.nextLine();
                     if (inventory.contains(name)) {
                         inventory.delete(name);
-                        System.out.println("Item deleted from inventory.");
+                        System.out.println("Ingredient deleted from inventory.");
                     } else {
-                        System.out.println("Item not found in inventory.");
+                        System.out.println("Ingredient not found in inventory.");
                     }
                 } else if (operation.equalsIgnoreCase("search")) {
-                    System.out.println("Enter the item name:");
+                    System.out.println("Enter the Ingredient name:");
                     String name = scanner.nextLine();
                     int quantity = inventory.get(name);
                     if (quantity != -1) {
-                        System.out.println("Item quantity: " + quantity);
+                        System.out.println("Ingredient quantity: " + quantity);
                     } else {
-                        System.out.println("Item not found in inventory.");
+                        System.out.println("Ingredient not found in inventory.");
                     }
                 } else if (operation.equalsIgnoreCase("update")) {
-                    System.out.println("Enter the item name:");
+                    System.out.println("Enter the Ingredient name:");
                     String name = scanner.nextLine();
                     if (inventory.contains(name)) {
                         System.out.println("Enter the new quantity:");
                         int newQuantity = Integer.parseInt(scanner.nextLine());
                         inventory.put(name, newQuantity);
-                        System.out.println("Item quantity updated.");
+                        System.out.println("Ingredient quantity updated.");
                     } else {
-                        System.out.println("Item not found in inventory.");
+                        System.out.println("Ingredient not found in inventory.");
                     }
                 } else if (operation.equalsIgnoreCase("exit")) {
                     break;
@@ -88,7 +88,7 @@ import java.util.Random;
                 } else if (operation.equalsIgnoreCase("exit")) {
                     break;
                 } else {
-                    System.out.println("Invalid operation.");
+                    System.out.println("Invalid Option.");
                 }
             }
         }
@@ -119,7 +119,10 @@ import java.util.Random;
         }
 
         public void handlePurchaseOperation(Scanner scanner, InventoryBST inventory, Menu menu, Customers customers, String customerName) {
+
+            menu.displayMenu(inventory);
             System.out.print("Enter the drink name: ");
+
             String drinkName = scanner.nextLine();
 
             if (menu.isDrinkAvailable(drinkName, inventory)) {
@@ -148,7 +151,7 @@ import java.util.Random;
                     System.out.println("Insufficient funds.");
                 }
             } else {
-                System.out.println("Drink not available due to insufficient funds.");
+                System.out.println("Drink not available due to insufficient Inventory.");
             }
         }
 
