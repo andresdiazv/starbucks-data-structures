@@ -1,4 +1,6 @@
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 public class Ingredients {
     private Ingredient head = null;
 
@@ -73,7 +75,7 @@ public class Ingredients {
             this.next = null;
         }
 
-        public ArrayList<String> getIngredients() {
+        public ArrayList<String> getIngredients(HashMap <String, Drink> drinksMenu) {
             ArrayList<String> ingredients = new ArrayList<>();
 
             for (Map.Entry<String, Drink> entry : drinksMenu.entrySet()) {
@@ -91,6 +93,7 @@ public class Ingredients {
 
             return ingredients;
         }
+
 
         public String getIngredient() {
             return this.ingredient;

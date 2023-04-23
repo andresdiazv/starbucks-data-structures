@@ -10,7 +10,10 @@ import java.util.List;
 import java.util.ArrayList;
 
 public class Menu {
+
+
     private HashMap<String, Drink> drinksMenu = new HashMap<>();
+
 
     public Menu(InventoryBST inventory) {
         addDrinks(inventory);

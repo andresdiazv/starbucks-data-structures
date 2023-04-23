@@ -6,7 +6,9 @@ public class Main {
         InventoryBST inventory = new InventoryBST();
         Menu menu = new Menu(inventory);
         Scanner scanner = new Scanner(System.in);
+        Customers customers = new Customers();
         HandleOperations handleOperations = new HandleOperations();
+
 
         while (true) {
             System.out.println("\nEnter your role: 'Manager' or 'Customer' (or type 'exit' to quit)");
@@ -15,7 +17,7 @@ public class Main {
             if (userRole.equalsIgnoreCase("Manager")) {
                 handleOperations.handleManagerOperations(scanner, inventory, menu);
             } else if (userRole.equalsIgnoreCase("Customer")) {
-                handleOperations.handleCustomerOperations(scanner, inventory, menu);
+                handleOperations.handleCustomerOperations(scanner, inventory, menu, customers);
             } else if (userRole.equalsIgnoreCase("exit")) {
                 break;
             } else {
