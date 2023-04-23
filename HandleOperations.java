@@ -111,18 +111,19 @@ public class HandleOperations {
     }
 
     private void handlePurchaseOperation(Scanner scanner, InventoryBST inventory, Menu menu, Customers customers,
-            String customerName) {
+                                         String customerName) {
         System.out.println("Enter the drink name:");
         String drinkName = scanner.nextLine();
 
         if (menu.isDrinkAvailable(drinkName, inventory)) {
             Drink drink = menu.getDrink(drinkName);
+            Ingredients ingredients = drink.getIngredients();
             double drinkPrice = drink.getPrice();
 
             double customerBalance = customers.getCustomerBalance(customerName);
 
             if (customerBalance >= drinkPrice) {
-                for (Map.Entry<String, Integer> ingredientEntry : drink.getIngredients().getIngredient().entrySet()) {
+                for (Map.Entry<String, Integer> ingredientEntry : ingredients.getIngredients().entrySet()) {
                     String ingredientName = ingredientEntry.getKey();
                     int ingredientQuantity = ingredientEntry.getValue();
                     inventory.put(ingredientName, inventory.get(ingredientName) - ingredientQuantity);
@@ -137,4 +138,5 @@ public class HandleOperations {
             System.out.println("Drink not available.");
         }
     }
+
 }
