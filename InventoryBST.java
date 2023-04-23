@@ -12,14 +12,17 @@ public class InventoryBST {
 
         public Node(String key) {
             this.key = key;
+            this.value = new Ingredients();
             this.ingredients = new int[0];
+
         }
     }
+
 
     public void put(String key, int value) {
         if (root == null) {
             root = new Node(key);
-            root.ingredients = new int[] { value };
+            root.value.addIngredient(key, value);
         }
         Node x = root;
         while (x != null) {
@@ -27,20 +30,17 @@ public class InventoryBST {
             if (cmp < 0) {
                 if (x.left == null) {
                     x.left = new Node(key);
-                    x.left.ingredients = new int[] { value };
+                    x.left.value.addIngredient(key, value);
                 }
                 x = x.left;
             } else if (cmp > 0) {
                 if (x.right == null) {
                     x.right = new Node(key);
-                    x.right.ingredients = new int[] { value };
+                    x.right.value.addIngredient(key, value);
                 }
                 x = x.right;
             } else {
-                int[] ingredients = x.ingredients;
-                int[] newIngredients = Arrays.copyOf(ingredients, ingredients.length + 1);
-                newIngredients[newIngredients.length - 1] = value;
-                x.ingredients = newIngredients;
+                x.value.addIngredient(key, value);
                 return;
             }
         }
