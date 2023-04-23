@@ -1,5 +1,6 @@
 import java.util.Comparator;
 
+// comparator for drinks to sort by price and then name
 public class DrinkComparator implements Comparator<Drink> {
     @Override
     public int compare(Drink drink1, Drink drink2) {

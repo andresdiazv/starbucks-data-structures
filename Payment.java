@@ -1,18 +1,20 @@
+/* You have been billed $total. Your balance is $balance.
+ * Customer:
+ * calls getBalance and setBalance will be inside of a method for setting customer balance
+ */
 public class Payment {
-    private double total;
-    private Prepare prepare;
 
-    public Payment(double total, Prepare prepare) {
-        this.total = total;
-        this.prepare = prepare;
+    public static boolean sufficientFunds(Customers customers, String name, double total){
+        if(customers.getCustomerBalance(name) >= total){
+            return false;
+        }
+        return true;
     }
 
-    public double makePayment(double price, double customerBalance) throws InsufficientBalanceException {
-        if (customerBalance >= price) {
-            double newBalance = customerBalance - price;
-            return newBalance;
-        } else {
-            throw new InsufficientBalanceException("Insufficient balance.");
-        }
+    public static void makePayment(Customers customers, String name, double total) {
+        double balance = customers.getCustomerBalance(name);
+        double newBalance = balance - total;
+        customers.updateCustomerBalance(name, newBalance);
+        System.out.println(name + ", your payment has processed. Your new balance is " + newBalance + ".");
     }
 }

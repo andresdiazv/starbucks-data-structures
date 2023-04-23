@@ -1,83 +1,101 @@
+/*
+ * Menu is provided an ArrayList of items.
+ * 
+ * Need to compare with inventory. 
+ */
+
 import java.util.HashMap;
 import java.util.Map;
 import java.util.List;
 import java.util.ArrayList;
 
 public class Menu {
-    private HashMap<String, Drink> menuItems;
+    private HashMap<String, Drink> drinksMenu = new HashMap<>();
 
     public Menu(InventoryBST inventory) {
-        menuItems = new HashMap<>();
-        addDefaultItems(inventory);
+        addDrinks(inventory);
     }
 
-    private void addDefaultItems(InventoryBST inventory) {
-        HashMap<String, Integer> americanoIngredients = new HashMap<>();
-        americanoIngredients.put("Espresso", 2);
-        americanoIngredients.put("Water", 1);
-        inventory.put("Espresso", 20);
-        inventory.put("Water", 50);
-        menuItems.put("Americano", new Drink("Americano", 2.75, americanoIngredients));
+    private void addDrinks(InventoryBST inventory) {
+        Ingredients americanoIngredients = new Ingredients();
+        americanoIngredients.addIngredient("Espresso", 3);
+        americanoIngredients.addIngredient("Water", 1);
+        drinksMenu.put("Americano", new Drink("Americano", 2.50, americanoIngredients));
 
-        HashMap<String, Integer> latteIngredients = new HashMap<>();
-        latteIngredients.put("Espresso", 1);
-        latteIngredients.put("Milk", 1);
-        inventory.put("Milk", 50);
-        menuItems.put("Latte", new Drink("Latte", 3.25, latteIngredients));
+        Ingredients latteIngredients = new Ingredients();
+        latteIngredients.addIngredient("Espresso", 2);
+        latteIngredients.addIngredient("Steamed Milk", 1);
+        drinksMenu.put("Latte", new Drink("Latte", 3.00, latteIngredients));
 
-        HashMap<String, Integer> cappuccinoIngredients = new HashMap<>();
-        cappuccinoIngredients.put("Espresso", 1);
-        cappuccinoIngredients.put("Milk", 1);
-        cappuccinoIngredients.put("Foam", 1);
-        inventory.put("Foam", 50);
-        menuItems.put("Cappuccino", new Drink("Cappuccino", 3.50, cappuccinoIngredients));
+        Ingredients cappuccinoIngredients = new Ingredients();
+        cappuccinoIngredients.addIngredient("Espresso", 2);
+        cappuccinoIngredients.addIngredient("Foamed Milk", 1);
+        drinksMenu.put("Cappuccino", new Drink("Cappuccino", 3.00, cappuccinoIngredients));
 
-        HashMap<String, Integer> mochaIngredients = new HashMap<>();
-        mochaIngredients.put("Espresso", 1);
-        mochaIngredients.put("Milk", 1);
-        mochaIngredients.put("Chocolate", 1);
-        inventory.put("Chocolate", 50);
-        menuItems.put("Mocha", new Drink("Mocha", 3.75, mochaIngredients));
+        Ingredients mochaIngredients = new Ingredients();
+        mochaIngredients.addIngredient("Espresso", 2);
+        mochaIngredients.addIngredient("Mocha Syrup", 1);
+        mochaIngredients.addIngredient("Steamed Milk", 1);
+        drinksMenu.put("Mocha", new Drink("Mocha", 3.50, mochaIngredients));
+
     }
 
-    public Drink getDrink(String drinkName) {
-        return menuItems.get(drinkName);
+    public void displayMenu(InventoryBST inventory) {
+        List<Drink> drinks = new ArrayList<>(drinksMenu.values());
+        List<Drink> sortedDrinks = DrinkSorter.sortDrinks(drinks);
+
+        System.out.println("\nMenu:");
+        for (Drink drink : sortedDrinks) {
+            String availability;
+            if (isDrinkAvailable(drink.getName(), inventory)) {
+                availability = "Available";
+            } else {
+                availability = "Unavailable";
+            }
+            System.out.printf("%s - $%.2f (%s)%n", drink.getName(), drink.getPrice(), availability);
+        }
+        System.out.print("\n");
     }
 
     public boolean isDrinkAvailable(String drinkName, InventoryBST inventory) {
-        Drink drink = menuItems.get(drinkName);
+
+        Drink drink = drinksMenu.get(drinkName);
         if (drink == null) {
             return false;
         }
 
-        for (Map.Entry<String, Integer> ingredient : drink.getIngredients().entrySet()) {
-            String ingredientName = ingredient.getKey();
-            int requiredAmount = ingredient.getValue();
+        Ingredients requiredIngredients = drink.getIngredients();
+        Ingredient currentIngredient = requiredIngredients.getHead();
 
-            if (inventory.get(ingredientName) < requiredAmount) {
+        while (currentIngredient != null) {
+            String ingredientName = currentIngredient.getIngredient();
+            int requiredQuantity = currentIngredient.getAmount();
+
+            int availableQuantity = inventory.get(ingredientName);
+            if (availableQuantity < requiredQuantity) {
                 return false;
             }
+            currentIngredient = currentIngredient.getNext();
         }
 
         return true;
     }
 
-    public void displayMenu() {
-        List<Drink> drinks = new ArrayList<>(menuItems.values());
-        List<Drink> sortedDrinks = DrinkSorter.sortDrinks(drinks);
-
-        System.out.println("\nMenu:");
-        for (Drink drink : sortedDrinks) {
-            System.out.printf("%s - $%.2f%n", drink.getName(), drink.getPrice());
-        }
-        System.out.print("\n");
-    }
-
     public void updateDrinkPrice(String drinkName, double newPrice) {
-        Drink drink = menuItems.get(drinkName);
+        // gets the drink from the menu
+        Drink drink = drinksMenu.get(drinkName);
+
+        // if the drink exists, update the price
         if (drink != null) {
-            HashMap<String, Integer> ingredients = drink.getIngredients();
-            menuItems.put(drinkName, new Drink(drinkName, newPrice, ingredients));
+            // gets ingredients to keep the same ingredients as before
+            Ingredients ingredients = drink.getIngredients();
+            // updates the drink in the menu with the new price
+            drinksMenu.put(drinkName, new Drink(drinkName, newPrice, ingredients));
         }
     }
+
+    public Drink getDrink(String drinkName) {
+        return drinksMenu.get(drinkName);
+    }
+
 }
