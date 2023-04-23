@@ -1,38 +1,46 @@
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Arrays;
 public class InventoryBST {
     private Node root;
 
     private class Node {
+        public Ingredients value;
         private String key;
-        private Ingredients value;
+        private int[] ingredients;
         private Node left, right;
 
-        public Node(String key, Ingredients value) {
+        public Node(String key) {
             this.key = key;
-            this.value = value;
+            this.ingredients = new int[0];
         }
     }
 
     public void put(String key, int value) {
         if (root == null) {
-            root = new Node(key, new Ingredients());
+            root = new Node(key);
+            root.ingredients = new int[] { value };
         }
         Node x = root;
         while (x != null) {
             int cmp = key.compareTo(x.key);
             if (cmp < 0) {
                 if (x.left == null) {
-                    x.left = new Node(key, new Ingredients());
+                    x.left = new Node(key);
+                    x.left.ingredients = new int[] { value };
                 }
                 x = x.left;
             } else if (cmp > 0) {
                 if (x.right == null) {
-                    x.right = new Node(key, new Ingredients());
+                    x.right = new Node(key);
+                    x.right.ingredients = new int[] { value };
                 }
                 x = x.right;
             } else {
-                x.value.addIngredient(key, value);
+                int[] ingredients = x.ingredients;
+                int[] newIngredients = Arrays.copyOf(ingredients, ingredients.length + 1);
+                newIngredients[newIngredients.length - 1] = value;
+                x.ingredients = newIngredients;
                 return;
             }
         }
@@ -59,7 +67,7 @@ public class InventoryBST {
             int cmp = key.compareTo(x.key);
             if (cmp < 0) x = x.left;
             else if (cmp > 0) x = x.right;
-            else return x.ingredients;
+            else return x.ingredients.clone();
         }
         return null;
     }
@@ -79,7 +87,7 @@ public class InventoryBST {
             for (int i = 0; i < ingredients.length; i += 2) {
                 String ingredientName = String.valueOf(ingredients[i]);
                 int ingredientQuantity = ingredients[i + 1];
-                put(ingredientName, get(ingredientName) - ingredientQuantity);
+                put(ingredientName, get(ingredientName) - (ingredientQuantity * quantity));
             }
             put(drinkName, get(drinkName) - quantity);
         }

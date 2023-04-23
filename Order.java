@@ -29,7 +29,7 @@ public class Order {
             System.out.println("Would you like to add a drink to your order? (y/n)");
             String response = scanner.nextLine();
             if(response.equals("y")) {
-                menu.displayMenu();
+                menu.displayMenu(inventory);
                 System.out.println("Please select a drink:");
                 String selection = scanner.nextLine();
                 Drink tempDrink = drinks.getDrink(selection);
@@ -55,8 +55,8 @@ public class Order {
             }
         }
         Payment.makePayment(customers, customerName, orderPrice);
-        Prepare prepare = new Prepare(customerOrder);
-        prepare.executeOrder(inventory);
+       // Prepare prepare = new Prepare(customerOrder);
+      //  prepare.executeOrder(inventory);
         System.out.println(customerName + ", your order of " + customerOrder.toString() + " is being prepared.");
     }
 

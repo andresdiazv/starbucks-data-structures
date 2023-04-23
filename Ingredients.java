@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 public class Ingredients {
     private Ingredient head = null;
 
@@ -70,6 +71,25 @@ public class Ingredients {
             this.ingredient = ingredient;
             this.amount = amount;
             this.next = null;
+        }
+
+        public ArrayList<String> getIngredients() {
+            ArrayList<String> ingredients = new ArrayList<>();
+
+            for (Map.Entry<String, Drink> entry : drinksMenu.entrySet()) {
+                Ingredients drinkIngredients = entry.getValue().getIngredients();
+                Ingredient currentIngredient = drinkIngredients.getHead();
+
+                while (currentIngredient != null) {
+                    String ingredientName = currentIngredient.getIngredient();
+                    if (!ingredients.contains(ingredientName)) {
+                        ingredients.add(ingredientName);
+                    }
+                    currentIngredient = currentIngredient.getNext();
+                }
+            }
+
+            return ingredients;
         }
 
         public String getIngredient() {
